@@ -1,0 +1,55 @@
+stages:
+  - build_frontend
+  - build_backend
+  - run_docker_compose
+  - build_and_push_containers
+
+variables:
+  DOCKER_IMAGE_FRONTEND: registry.gitlab.com/quantus-eng/cs-4471a-project-service-registry/frontend
+  DOCKER_IMAGE_BACKEND: registry.gitlab.com/quantus-eng/cs-4471a-project-service-registry/backend
+
+before_script:
+  - mkdir -p $HOME/.docker
+  - echo '{"auths":{"registry.gitlab.com":{"username":"DakotaS1998","password":"glpat-JiEcF1bFsVud55bms3RC","email":"dakota.soares@execulink.com"}}}' > $HOME/.docker/config.json
+
+
+build_frontend:
+  stage: build_frontend
+  image: docker:latest
+  services:
+    - name: docker:dind
+  script:
+    - cd frontend
+    - docker build -t $DOCKER_IMAGE_FRONTEND .
+    - docker push $DOCKER_IMAGE_FRONTEND
+
+build_backend:
+  stage: build_backend
+  image: docker:latest
+  services:
+    - name: docker:dind
+  script:
+    - cd backend
+    - docker build -t $DOCKER_IMAGE_BACKEND .
+    - docker push $DOCKER_IMAGE_BACKEND
+
+run_docker_compose:
+  stage: run_docker_compose
+  image: docker/compose:1.29.2
+  services:
+    - name: docker:dind
+  script:
+    - docker-compose up -d
+
+build_and_push_containers:
+  stage: build_and_push_containers
+  image: docker:latest
+  services:
+    - name: docker:dind
+  script:
+    - cd frontend
+    - docker build -t $DOCKER_IMAGE_FRONTEND .
+    - docker push $DOCKER_IMAGE_FRONTEND
+    - cd ../backend
+    - docker build -t $DOCKER_IMAGE_BACKEND .
+    - docker push $DOCKER_IMAGE_BACKEND

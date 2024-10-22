@@ -5,7 +5,7 @@ const cron = require('node-cron');
 const cors = require('cors');
 
 const supabaseURL = 'https://vudfoksgebxejqxjgnli.supabase.co'; 
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ1ZGZva3NnZWJ4ZWpxeGpnbmxpIiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTk5MjUxMzEsImV4cCI6MjAxNTUwMTEzMX0.bjRh4E9fsYZTtF5l58PChhYA4IXuZDq8xdB3qeZYlks';
+const supabaseKey = '##########';
 
 const supabase = createClient(supabaseURL, supabaseKey);
 
